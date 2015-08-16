@@ -41,8 +41,11 @@ namespace ContosoUniversity.Controllers
         // GET: Course/Create
         public ActionResult Create()
         {
-            ViewBag.DepartmentID = new SelectList(db.Departments, "DepartmentID", "Name");
+            PopulateDepartmentDropDownList();
             return View();
+
+            //ViewBag.DepartmentID = new SelectList(db.Departments, "DepartmentID", "Name");
+            // return View();
         }
 
         // POST: Course/Create
@@ -52,31 +55,43 @@ namespace ContosoUniversity.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "CourseID,Title,Credits,DepartmentID")] Course course)
         {
-            if (ModelState.IsValid)
+            try
             {
-                db.Courses.Add(course);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    db.Courses.Add(course);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
             }
+            catch (DataException /*dex*/)
+            {
+                ModelState.AddModelError("", "Unable to save changes. Try again,..");
+            }//end try-catch
 
-            ViewBag.DepartmentID = new SelectList(db.Departments, "DepartmentID", "Name", course.DepartmentID);
+            PopulateDepartmentDropDownList(course.DepartmentID);
             return View(course);
         }
 
         // GET: Course/Edit/5
         public ActionResult Edit(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+
             Course course = db.Courses.Find(id);
-            if (course == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.DepartmentID = new SelectList(db.Departments, "DepartmentID", "Name", course.DepartmentID);
+            PopulateDepartmentDropDownList(course.DepartmentID);
             return View(course);
+
+            //if (id == null)
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            //}
+            //Course course = db.Courses.Find(id);
+            //if (course == null)
+            //{
+            //    return HttpNotFound();
+            //}
+            //ViewBag.DepartmentID = new SelectList(db.Departments, "DepartmentID", "Name", course.DepartmentID);
+            //return View(course);
         }
 
         // POST: Course/Edit/5
@@ -86,14 +101,27 @@ namespace ContosoUniversity.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "CourseID,Title,Credits,DepartmentID")] Course course)
         {
-            if (ModelState.IsValid)
+            try
             {
-                db.Entry(course).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    db.Entry(course).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
             }
-            ViewBag.DepartmentID = new SelectList(db.Departments, "DepartmentID", "Name", course.DepartmentID);
+            catch (DataException /*dex*/)
+            {
+                ModelState.AddModelError("", "Unable to save changes. Try again,..");
+            }
+
+
+
+            PopulateDepartmentDropDownList(course.DepartmentID);
             return View(course);
+
+            //ViewBag.DepartmentID = new SelectList(db.Departments, "DepartmentID", "Name", course.DepartmentID);
+            //return View(course);
         }
 
         // GET: Course/Delete/5
@@ -130,5 +158,17 @@ namespace ContosoUniversity.Controllers
             }
             base.Dispose(disposing);
         }
+
+
+        private void PopulateDepartmentDropDownList(object selectedDepartment = null)
+        {
+            var departmentsQuery = from d in db.Departments
+                                   orderby d.Name
+                                   select d;
+            ViewBag.DepartmentID = new SelectList(departmentsQuery, "DepartmentID", "Name", selectedDepartment);
+        }
+
     }
+
+
 }
