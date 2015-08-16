@@ -25,6 +25,10 @@ namespace ContosoUniversity.Models
         [Display(Name ="Administrator")]
         public int? InstructorID { get; set; }
 
+        //used for concurrency handling
+        [Timestamp]
+        public byte[] RowVersion { get; set; }
+
         //navigational properties
         public virtual Instructor Administrator { get; set; }
         public virtual ICollection<Course> Courses { get; set; }

@@ -47,3 +47,4 @@ c:\users\user\documents\visual studio 2015\Projects\new\ContosoUniversity\Contos
 c:\users\user\documents\visual studio 2015\Projects\new\ContosoUniversity\ContosoUniversity\obj\Debug\ContosoUniversity.Migrations.MaxLEngthOnNames.resources
 c:\users\user\documents\visual studio 2015\Projects\new\ContosoUniversity\ContosoUniversity\obj\Debug\ContosoUniversity.Migrations.ColumnFirstName.resources
 c:\users\user\documents\visual studio 2015\Projects\new\ContosoUniversity\ContosoUniversity\obj\Debug\ContosoUniversity.Migrations.Chap4.resources
+c:\users\user\documents\visual studio 2015\Projects\new\ContosoUniversity\ContosoUniversity\obj\Debug\ContosoUniversity.Migrations.RowVersion.resources
